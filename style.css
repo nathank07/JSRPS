@@ -1,0 +1,37 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hstack{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.score{
+    margin-bottom: 24px;
+    font-size: large;
+}
+
+h1{
+    font-size: xx-large;
+}
+
+input{
+    display: flex;
+    max-width: 25%;
+    aspect-ratio: 1 / 1;
+    border-radius: 10px;
+    border-color: black;
+    border: solid 4px;
+    background-color: rgb(251, 255, 223);
+}
+.vstack{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
