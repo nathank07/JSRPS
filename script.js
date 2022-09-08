@@ -1,80 +1,81 @@
+const container = document.querySelector('#container');
+const rock = document.querySelector(".rock");
+const paper = document.querySelector(".paper");
+const scissors = document.querySelector(".scissors");
+const info = document.querySelector("h1");
+const winrate = document.querySelector(".score");
+let win = 0;
+let tie = 0;
+let loss = 0;
+rock.addEventListener('click', (event) => {
+    playRound("rock", getComputerChoice());
+});
+paper.addEventListener('click', (event) => {
+    playRound("paper", getComputerChoice());
+});
+scissors.addEventListener('click', (event) => {
+    playRound("scissors", getComputerChoice());
+});
+info.innerHTML = `<h1>Select Rock, Paper, or Scissors.</h1>`
+winrate.innerHTML = "<div class='score'>" + win + "-" + tie + "-" + loss + "</div>";
 
-console.log(game())
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
 function getComputerChoice() {
     let number = Math.random()
     if (number <= 0.33){
-        return "r";
+        return "rock";
     }
     if (number <= 0.66){
-        return "p"; 
+        return "paper"; 
     }
     if (number <= 1){
-        return "s"; 
+        return "scissors"; 
     }    
 }
 function playRound(playerSelection, computerSelection){
-    if(playerSelection === "r"){
-        if(computerSelection == "r"){
-            return "It's a tie! You both picked rock."
+    playerMove = capitalizeFirstLetter(playerSelection);
+    function ifComputerSelection(losingMove){
+        if(computerSelection == losingMove){
+            win+=1;
+            winrate.innerHTML = "<div class='score'>" + win + "-" + tie + "-" + loss + "</div>";
+            info.innerHTML = "<h1>" + playerMove + " beats " + computerSelection + "! You win!</h1>"
         }
-        if(computerSelection == "p"){
-            return "You lose. Paper beats rock."
-        }
-        if(computerSelection == "s"){
-            return "You won! Rock beats scissors!"
-        }
-    }
-    if(playerSelection === "p"){
-        if(computerSelection == "r"){
-            return "You won! Paper beats rock!"
-        }
-        if(computerSelection == "p"){
-            return "It's a tie! You both picked paper."
-        }
-        if(computerSelection == "s"){
-            return "You lose. Scissors beats paper."
-        }
-    }
-    if(playerSelection === "s"){
-        if(computerSelection == "r"){
-            return "You lose. Rock beats scissors."
-        }
-        if(computerSelection == "p"){
-            return "You won! Scissors beats paper!"
-        }
-        if(computerSelection == "s"){
-            return "It's a tie! You both picked scissors."
-        }
-    }
-}
-function game(){
-    let wins = 0;
-    let losses = 0;
-    let ties = 0;
-    for(let i=0; i<5; i++){
-        try {
-            let playerSelection = prompt("Choose rock, paper, or scissors.")
-            playerSelection = playerSelection.charAt(0).toLowerCase()
-            let computerSelection = getComputerChoice()
-            let result = playRound(playerSelection, computerSelection)
-            switch(result.charAt(4)){
-                case "w":
-                    wins += 1
-                    break;
-                case "l":
-                    losses += 1
-                    break;
-                case " ":
-                    ties += 1
-                    break;
+        else{
+            if(playerSelection === computerSelection){
+                tie+=1;
+                winrate.innerHTML = "<div class='score'>" + win + "-" + tie + "-" + loss + "</div>";
+                info.innerHTML = "<h1>" + playerMove + " ties against " + computerSelection + ". You drew.</h1>"
             }
-            console.log(result, `Current record: ${wins}W-${ties}T-${losses}L`)
+                else{
+                    loss+=1;
+                    winrate.innerHTML = "<div class='score'>" + win + "-" + tie + "-" + loss + "</div>";
+                    info.innerHTML = "<h1>" + playerMove + " loses against " + computerSelection + ". You lost.</h1>"
+                }
+    }
+    }
+    if(playerSelection === "rock"){
+        ifComputerSelection("scissors");
+    }
+    if(playerSelection === "paper"){
+        ifComputerSelection("rock");
+    }
+    if(playerSelection === "scissors"){
+        ifComputerSelection("paper")
+    }
+    if(win == 5 || loss == 5){
+        if(win == 5){
+            info.innerHTML = `<h1>Congratulations! You reached 5 wins first!</h1>`;
         }
-        catch{
-            console.log("That didn't work! Did you mistype?");
-            i--;
+        else {
+            info.innerHTML = `<h1>The computer reached 5 wins before you did. You lose...</h1>`;
         }
+        win = 0;
+        tie = 0;
+        loss = 0;
+        winrate.innerHTML = "<div class='score'>" + win + "-" + tie + "-" + loss + "</div>";
     }
 }
 
